@@ -1,10 +1,13 @@
 import express from 'express';
 import { json } from 'body-parser';
 import mongoose from 'mongoose';
-import { UserRouter } from './routes/user';
-import { DATABASE_URL } from './config/mongo';
+import cors from "cors";
+import { UserRouter } from './src/routes/user';
+import { DATABASE_URL } from './src/config/mongo';
 
 const app = express();
+const port = 8000;
+app.use(cors());
 app.use(json());
 
 /**
@@ -26,6 +29,6 @@ app.use(UserRouter);
 /**
  * Start server
  */
-app.listen(7000, () => {
-  console.log('server is listening on port 7000');
+app.listen(port, () => {
+  console.log(`server is listening on port ${port}`);
 })

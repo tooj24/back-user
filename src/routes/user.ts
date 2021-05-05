@@ -5,15 +5,23 @@ const router = express.Router();
 
 // list users
 router.get('/users', async (req: Request, res: Response) => {
-  const users = await User.find({});
-  return res.status(200).send(users);
+  try {
+    const users = await User.find({});
+    return res.status(200).send(users);
+  } catch (error) {
+    return res.status(500).send({ error: error });
+  }
 })
 
 // get by id
 router.get('/users/:id', async (req: Request, res: Response) => {
-  const {id} = req.params;
-  const user = await User.findById(id);
-  return res.status(200).send(user);
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    return res.status(200).send(user);
+  } catch (error) {
+    return res.status(500).send({ error: error });
+  }
 })
 
 // create user
