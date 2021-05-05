@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
+import { validationResult } from 'express-validator';
 import { User } from '../models/user';
+import { userValidation } from '../validation/user';
 
 const router = express.Router();
 
@@ -25,9 +27,14 @@ router.get('/users/:id', async (req: Request, res: Response) => {
 })
 
 // create user
-router.post('/users', async (req: Request, res: Response) => {
+router.post('/users', userValidation, async (req: Request, res: Response) => {
   try {
     const { lastname, firstname, email } = req.body;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
     const user = User.build({ lastname, firstname, email })
     await user.save();
@@ -53,9 +60,15 @@ router.delete('/users/:id', async (req: Request, res: Response) => {
 })
 
 // update user
-router.put('/users/:id', async (req: Request, res: Response) => {
+router.put('/users/:id', userValidation, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const user = await User.findByIdAndUpdate(id, { updatedAt: Date.now, ...req.body });
 
     return res.status(200).send(user);
