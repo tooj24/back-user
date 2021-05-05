@@ -1,6 +1,7 @@
 import express from 'express';
 import { json } from 'body-parser';
 import mongoose from 'mongoose';
+import logger from 'morgan';
 import cors from "cors";
 import { UserRouter } from './src/routes/user';
 import { DATABASE_URL } from './src/config/mongo';
@@ -9,6 +10,7 @@ const app = express();
 const port = 8000;
 app.use(cors());
 app.use(json());
+app.use(logger('dev'));
 
 /**
  * Database
